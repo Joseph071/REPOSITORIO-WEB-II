@@ -180,7 +180,40 @@ func PedidosDeCliente(
 	clienteID int,
 ) {
 
-	fmt.Printf("\n=== REPORTE: Pedidos del ciente con ID: %d ===\n", clienteID)
+	encontradas := 0
+	totalf := 0.00
+
+	//buscamos cliente
+	idxC := BuscarClientePorID(clientes, clienteID)
+	if idxC == -1 {
+		fmt.Println("cliente no encontrado")
+		return
+	}
+	fmt.Printf("\n=== REPORTE: Pedidos del ciente: %s, con ID: %d ===\n", clientes[idxC].Nombre, clienteID)
+
+	for _, ped := range pedidos {
+
+		//buscamos producto
+		idxP := BuscarProductoPorID(productos, ped.ProductoID)
+		if idxP == -1 {
+			continue
+		}
+
+		encontradas++
+		totalf = totalf + ped.Total
+
+		fmt.Printf("ID del Pedido: %d | Producto: %s | Cantidad: %d | Total: %.2f | Fecha: %s\n", ped.ID,
+			productos[idxP].Nombre,
+			ped.Cantidad,
+			ped.Total,
+			ped.Fecha)
+
+	}
+	if encontradas == 0 {
+		fmt.Println("  (no hay pedidos que coincidan con los filtros)")
+	} else {
+		fmt.Printf("\n  Total acumuladode de cuánto ha gastado: %.2f \n", totalf)
+	}
 
 }
 
